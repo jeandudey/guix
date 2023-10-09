@@ -14,7 +14,12 @@
 (home-environment
   ;; Below is the list of packages that will show up in your
   ;; Home profile, under ~/.guix-home/profile.
-  (packages (specifications->packages (list "git" "bat" "neovim")))
+  (packages
+    (specifications->packages
+      (list "git"
+            "bat"
+            "neovim"
+            "vim-nerdtree")))
 
   ;; Below is the list of Home services.  To search for available
   ;; services, run 'guix home search KEYWORD' in a terminal.
@@ -30,5 +35,5 @@
                     (list (local-file ".bash_profile" "bash_profile")))))
 
         (service home-xdg-configuration-files-service-type
-                 (list (list "nvim/init.vim"
-                             (local-file "init.vim" "init.vim")))))))
+                 (list (list "nvim/init.lua"
+                             (local-file "init.lua" "init.lua")))))))
