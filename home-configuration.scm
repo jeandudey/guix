@@ -19,7 +19,8 @@
       (list "git"
             "bat"
             "neovim"
-            "vim-nerdtree")))
+            "vim-nerdtree"
+            "wl-clipboard")))
 
   ;; Below is the list of Home services.  To search for available
   ;; services, run 'guix home search KEYWORD' in a terminal.
@@ -36,4 +37,6 @@
 
         (service home-xdg-configuration-files-service-type
                  (list (list "nvim/init.lua"
-                             (local-file "init.lua" "init.lua")))))))
+                             (local-file "init.lua" "init.lua"))
+                       (list "git/config"
+                             (local-file "gitconfig" "gitconfig")))))))
