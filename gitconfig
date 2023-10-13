@@ -1,0 +1,8 @@
+[user]
+	name = Jean-Pierre De Jesus DIAZ
+	email = me@jeandudey.tech
+	signingKey = 6279AEC20A9524EC!
+[core]
+	editor = nvim
+[commit]
+	gpgSign = true
