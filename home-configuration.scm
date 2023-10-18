@@ -35,6 +35,7 @@
             "pkg-config"
             "ripgrep"
             "speedcrunch"
+            "strace"
             "telegram-desktop"
             "tmux"
             "ungoogled-chromium"
