@@ -16,9 +16,28 @@
   ;; Home profile, under ~/.guix-home/profile.
   (packages
     (specifications->packages
-      (list "git"
-            "bat"
+      (list "bat"
+            "bison"
+            "btop"
+            "fd"
+            "flatpak"
+            "flex"
+            "gcc-toolchain"
+            "ghex"
+            "git"
+            "icecat"
+            "libreoffice"
+            "m4"
+            "make"
+            "ncurses"
             "neovim"
+            "openssh"
+            "pkg-config"
+            "ripgrep"
+            "speedcrunch"
+            "telegram-desktop"
+            "tmux"
+            "ungoogled-chromium"
             "vim-nerdtree"
             "wl-clipboard")))
 
