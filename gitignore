@@ -1,0 +1,5 @@
+# For the guix shell on projects that don't have a manifest.scm.
+#
+# Can add the file to the repository by doing: `git add -f manifest.scm`.
+#
+manifest.scm

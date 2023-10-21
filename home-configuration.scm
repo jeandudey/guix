@@ -62,4 +62,6 @@
                  (list (list "nvim/init.lua"
                              (local-file "init.lua" "init.lua"))
                        (list "git/config"
-                             (local-file "gitconfig" "gitconfig")))))))
+                             (local-file "gitconfig" "gitconfig"))
+                       (list "git/ignore"
+                             (local-file "gitignore" "gitignore")))))))
