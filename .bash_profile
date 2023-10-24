@@ -18,3 +18,7 @@ export EDITOR=nvim
 
 export XDG_DATA_DIRS="$XDG_DATA_DIRS:$HOME/.local/share/flatpak/exports/share"
 export XDG_DATA_DIRS="$XDG_DATA_DIRS:/var/lib/flatpak/exports/share"
+
+# To make Cargo happy since `cc` can't find gcc in the $PATH environment
+# variable.
+export CC=gcc
