@@ -41,6 +41,7 @@
             "strace"
             "telegram-desktop"
             "tmux"
+            "tree-sitter-rust"
             "ungoogled-chromium"
             "vim-nerdtree"
             "wl-clipboard")))
