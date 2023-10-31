@@ -4,12 +4,14 @@
 ;; necesita capturar los canales que están siendo usados, como son devueltos por "guix describe".
 ;; Vea la sección "Replicando Guix" en el manual.
 
-(use-modules (gnu home)
+(use-modules (foundation packages tree-sitter)
+             (gnu home)
              (gnu packages)
+             (gnu packages tree-sitter)
              (gnu services)
-             (guix gexp)
-	     (gnu home services)
-             (gnu home services shells))
+             (gnu home services)
+             (gnu home services shells)
+             (guix gexp))
 
 (home-environment
   ;; Below is the list of packages that will show up in your
@@ -32,6 +34,7 @@
             "make"
             "ncurses"
             "neovim"
+            "neovim-packer"
             "openocd"
             "openrgb"
             "openssh"
@@ -41,7 +44,6 @@
             "strace"
             "telegram-desktop"
             "tmux"
-            "tree-sitter-rust"
             "ungoogled-chromium"
             "vim-nerdtree"
             "wl-clipboard")))
@@ -60,9 +62,17 @@
                     (list (local-file ".bash_profile" "bash_profile")))))
 
         (service home-xdg-configuration-files-service-type
-                 (list (list "nvim/init.lua"
-                             (local-file "init.lua" "init.lua"))
-                       (list "git/config"
+                 (list (list "git/config"
                              (local-file "gitconfig" "gitconfig"))
                        (list "git/ignore"
-                             (local-file "gitignore" "gitignore")))))))
+                             (local-file "gitignore" "gitignore"))
+                       (list "nvim/init.lua"
+                             (local-file "init.lua" "init.lua"))
+                       (list "nvim/parser/bash.so"
+                             (file-append tree-sitter-bash "/lib/tree-sitter/libtree-sitter-bash.so"))
+                       (list "nvim/parser/rust.so"
+                             (file-append tree-sitter-rust "/lib/tree-sitter/libtree-sitter-rust.so"))
+                       (list "nvim/parser/scheme.so"
+                             (file-append tree-sitter-scheme "/lib/tree-sitter/libtree-sitter-scheme.so"))
+                       (list "nvim/parser/slint.so"
+                             (file-append tree-sitter-slint-unofficial "/lib/tree-sitter/libtree-sitter-slint.so")))))))

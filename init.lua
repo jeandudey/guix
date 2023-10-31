@@ -29,3 +29,23 @@ vim.o.expandtab  = true
 vim.o.tabstop    = 4
 vim.o.shiftwidth = 4
 vim.o.number     = true
+
+local packer = require('packer')
+
+packer.init({
+	display = {
+		open_fn = function()
+			return require('packer.util').float({ border = 'rounded' })
+		end,
+	},
+})
+
+packer.startup(function(use)
+    use('nvim-treesitter/nvim-treesitter')
+end)
+
+require('nvim-treesitter.configs').setup {
+    highlight = {
+        enable = true,
+    }
+}
