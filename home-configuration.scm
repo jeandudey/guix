@@ -42,6 +42,7 @@
             "ripgrep"
             "speedcrunch"
             "strace"
+            "slint-lsp"
             "telegram-desktop"
             "tmux"
             "ungoogled-chromium"
@@ -70,6 +71,8 @@
                              (local-file "init.lua" "init.lua"))
                        (list "nvim/parser/bash.so"
                              (file-append tree-sitter-bash "/lib/tree-sitter/libtree-sitter-bash.so"))
+                       (list "nvim/parser/markdown.so"
+                             (file-append tree-sitter-markdown "/lib/tree-sitter/libtree-sitter-markdown.so"))
                        (list "nvim/parser/rust.so"
                              (file-append tree-sitter-rust "/lib/tree-sitter/libtree-sitter-rust.so"))
                        (list "nvim/parser/scheme.so"

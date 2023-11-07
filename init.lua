@@ -42,6 +42,7 @@ packer.init({
 
 packer.startup(function(use)
     use('nvim-treesitter/nvim-treesitter')
+    use('neovim/nvim-lspconfig')
 end)
 
 require('nvim-treesitter.configs').setup {
@@ -49,3 +50,5 @@ require('nvim-treesitter.configs').setup {
         enable = true,
     }
 }
+
+require('lspconfig').slint_lsp.setup {}
