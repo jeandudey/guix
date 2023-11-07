@@ -30,6 +30,14 @@ vim.o.tabstop    = 4
 vim.o.shiftwidth = 4
 vim.o.number     = true
 
+vim.api.nvim_create_autocmd(
+    'BufEnter',
+    pattern = '*.slint',
+    callback = function()
+        vim.api.nvim_buf_set_option(buf, 'filetype', 'slint')
+    end()
+)
+
 local packer = require('packer')
 
 packer.init({
