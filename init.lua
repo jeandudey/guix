@@ -30,22 +30,22 @@ vim.o.tabstop    = 4
 vim.o.shiftwidth = 4
 vim.o.number     = true
 
-vim.api.nvim_create_autocmd(
-    'BufEnter',
-    pattern = '*.slint',
+vim.api.nvim_create_autocmd('BufEnter', {
+    pattern  = '*.slint',
     callback = function()
+        local buf = vim.api.nvim_get_current_buf()
         vim.api.nvim_buf_set_option(buf, 'filetype', 'slint')
-    end()
-)
+    end,
+})
 
 local packer = require('packer')
 
 packer.init({
-	display = {
-		open_fn = function()
-			return require('packer.util').float({ border = 'rounded' })
-		end,
-	},
+    display = {
+        open_fn = function()
+            return require('packer.util').float({ border = 'rounded' })
+        end,
+    },
 })
 
 packer.startup(function(use)
