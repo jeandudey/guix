@@ -21,6 +21,7 @@
       (list "bat"
             "bison"
             "btop"
+            "clang"
             "fd"
             "flatpak"
             "flex"
@@ -73,6 +74,8 @@
                              (file-append tree-sitter-bash "/lib/tree-sitter/libtree-sitter-bash.so"))
                        (list "nvim/parser/markdown.so"
                              (file-append tree-sitter-markdown "/lib/tree-sitter/libtree-sitter-markdown.so"))
+                       (list "nvim/parser/meson.so"
+                             (file-append tree-sitter-meson "/lib/tree-sitter/libtree-sitter-meson.so"))
                        (list "nvim/parser/rust.so"
                              (file-append tree-sitter-rust "/lib/tree-sitter/libtree-sitter-rust.so"))
                        (list "nvim/parser/scheme.so"

@@ -59,4 +59,7 @@ require('nvim-treesitter.configs').setup {
     }
 }
 
-require('lspconfig').slint_lsp.setup {}
+local lspconfig = require('lspconfig')
+
+lspconfig.clangd.setup {}
+lspconfig.slint_lsp.setup {}
