@@ -16,9 +16,6 @@
 
   (kernel linux-6.5)
   (kernel-arguments '("amd_pstate=active"
-                      "iommu=pt"
-                      "vfio-pci.ids=10de:128b,10de:0e0f"
-                      "modprobe.blacklist=usbmouse,usbkdb,nouveau"
                       "quiet"))
   (initrd microcode-initrd)
   (firmware (list linux-firmware))
