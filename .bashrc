@@ -18,7 +18,3 @@ fi
 
 # Source the system-wide file.
 [ -f /etc/bashrc ] && source /etc/bashrc
-
-alias ls='ls -p --color=auto'
-alias ll='ls -l'
-alias grep='grep --color=auto'

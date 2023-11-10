@@ -1,30 +1,3 @@
-profile_directories = {
-    '/run/current-system/profile',
-    vim.env.HOME .. '/.guix-profile',
-    vim.env.HOME .. '/.guix-home/profile',
-    vim.env.GUIX_PROFILE,
-    vim.env.GUIX_ENVIRONMENT,
-}
-
-for _, directory in pairs(profile_directories) do
-    vimplugins = directory .. '/share/vim/vimfiles'
-    if vim.fn.isdirectory(vimplugins) ~= 0 then
-        vim.opt.rtp:append(vimplugins)
-    end
-end
-
-after_directories = {
-    vim.env.VIM .. '/vimfiles',
-    vim.env.HOME .. '/.vim',
-}
-
-for _, directory in pairs(after_directories) do
-    vimplugins = directory .. '/after'
-    if vim.fn.isdirectory(vimplugins) ~= 0 then
-        vim.opt.rtp:append(vimplugins)
-    end
-end
-
 vim.o.expandtab  = true
 vim.o.tabstop    = 4
 vim.o.shiftwidth = 4
@@ -51,6 +24,12 @@ packer.init({
 packer.startup(function(use)
     use('nvim-treesitter/nvim-treesitter')
     use('neovim/nvim-lspconfig')
+    use('preservim/nerdtree')
+    use('Mofiqul/dracula.nvim')
+    use('hrsh7th/cmp-nvim-lsp')
+    use('hrsh7th/cmp-buffer')
+    use('hrsh7th/cmp-path')
+    use('hrsh7th/nvim-cmp')
 end)
 
 require('nvim-treesitter.configs').setup {
@@ -62,4 +41,28 @@ require('nvim-treesitter.configs').setup {
 local lspconfig = require('lspconfig')
 
 lspconfig.clangd.setup {}
+lspconfig.rust_analyzer.setup {}
 lspconfig.slint_lsp.setup {}
+
+vim.cmd[[colorscheme dracula]]
+vim.cmd[[set background=dark]]
+
+local cmp = require('cmp')
+
+cmp.setup({
+    window = {
+        completion    = cmp.config.window.bordered(),
+        documentation = cmp.config.window.bordered(),
+    },
+    sources = cmp.config.sources(
+        {{ name = 'nvim_lsp' }},
+        {{ name = 'buffer' }}
+    ),
+})
+
+cmp.setup.cmdline({ '/', '?' }, {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+        { name = 'buffer' }
+    }
+})

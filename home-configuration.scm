@@ -13,6 +13,10 @@
              (gnu home services shells)
              (guix gexp))
 
+(define (nvim-tree-sitter package name)
+  (list (string-append "nvim/parser/" name ".so")
+        (file-append package "/lib/tree-sitter/libtree-sitter-" name ".so")))
+
 (home-environment
   ;; Below is the list of packages that will show up in your
   ;; Home profile, under ~/.guix-home/profile.
@@ -40,14 +44,17 @@
             "openrgb"
             "openssh"
             "pkg-config"
+            "rust"
+            "rust:cargo"
+            "rust:tools"
             "ripgrep"
             "speedcrunch"
             "strace"
             "slint-lsp"
             "telegram-desktop"
             "tmux"
-            "ungoogled-chromium"
             "vim-nerdtree"
+            "ungoogled-chromium"
             "wl-clipboard")))
 
   ;; Below is the list of Home services.  To search for available
@@ -63,22 +70,22 @@
                    (bash-profile
                     (list (local-file ".bash_profile" "bash_profile")))))
 
-        (service home-xdg-configuration-files-service-type
-                 (list (list "git/config"
-                             (local-file "gitconfig" "gitconfig"))
-                       (list "git/ignore"
-                             (local-file "gitignore" "gitignore"))
-                       (list "nvim/init.lua"
-                             (local-file "init.lua" "init.lua"))
-                       (list "nvim/parser/bash.so"
-                             (file-append tree-sitter-bash "/lib/tree-sitter/libtree-sitter-bash.so"))
-                       (list "nvim/parser/markdown.so"
-                             (file-append tree-sitter-markdown "/lib/tree-sitter/libtree-sitter-markdown.so"))
-                       (list "nvim/parser/meson.so"
-                             (file-append tree-sitter-meson "/lib/tree-sitter/libtree-sitter-meson.so"))
-                       (list "nvim/parser/rust.so"
-                             (file-append tree-sitter-rust "/lib/tree-sitter/libtree-sitter-rust.so"))
-                       (list "nvim/parser/scheme.so"
-                             (file-append tree-sitter-scheme "/lib/tree-sitter/libtree-sitter-scheme.so"))
-                       (list "nvim/parser/slint.so"
-                             (file-append tree-sitter-slint-unofficial "/lib/tree-sitter/libtree-sitter-slint.so")))))))
+         (simple-service 'custom-environment-variables
+                         home-environment-variables-service-type
+                         '(("CC" . "gcc")
+                           ("EDITOR" . "nvim")))
+
+         (service home-xdg-configuration-files-service-type
+                  (list (list "git/config"
+                              (local-file "gitconfig" "gitconfig"))
+                        (list "git/ignore"
+                              (local-file "gitignore" "gitignore"))
+                        (list "nvim/init.lua"
+                              (local-file "init.lua" "init.lua"))
+                        (nvim-tree-sitter tree-sitter-bash "bash")
+                        (nvim-tree-sitter tree-sitter-markdown "markdown")
+                        (nvim-tree-sitter tree-sitter-meson "meson")
+                        (nvim-tree-sitter tree-sitter-org "org")
+                        (nvim-tree-sitter tree-sitter-rust "rust")
+                        (nvim-tree-sitter tree-sitter-scheme "scheme")
+                        (nvim-tree-sitter tree-sitter-slint-unofficial "slint"))))))
