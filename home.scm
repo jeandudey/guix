@@ -32,6 +32,7 @@
             "gcc-toolchain"
             "ghex"
             "git"
+            "hexyl"
             "icecat"
             "just"
             "libreoffice"
@@ -83,6 +84,7 @@
                         (list "nvim/init.lua"
                               (local-file "init.lua" "init.lua"))
                         (nvim-tree-sitter tree-sitter-bash "bash")
+                        (nvim-tree-sitter tree-sitter-java "java")
                         (nvim-tree-sitter tree-sitter-markdown "markdown")
                         (nvim-tree-sitter tree-sitter-meson "meson")
                         (nvim-tree-sitter tree-sitter-org "org")
