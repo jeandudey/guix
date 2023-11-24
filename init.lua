@@ -50,14 +50,20 @@ vim.cmd[[set background=dark]]
 local cmp = require('cmp')
 
 cmp.setup({
-    window = {
-        completion    = cmp.config.window.bordered(),
-        documentation = cmp.config.window.bordered(),
-    },
+    mapping = cmp.mapping.preset.insert({
+        ['<C-space>'] = cmp.mapping.complete(),
+        ['<C-j>']     = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+        ['<C-k>']     = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+        ['<CR>']      = cmp.mapping.confirm({ select = false }),
+    }),
     sources = cmp.config.sources(
         {{ name = 'nvim_lsp' }},
         {{ name = 'buffer' }}
     ),
+    window = {
+        completion    = cmp.config.window.bordered(),
+        documentation = cmp.config.window.bordered(),
+    },
 })
 
 cmp.setup.cmdline({ '/', '?' }, {
