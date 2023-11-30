@@ -7,6 +7,7 @@
 (use-modules (foundation packages tree-sitter)
              (gnu home)
              (gnu packages)
+             (gnu packages fonts)
              (gnu packages tree-sitter)
              (gnu services)
              (gnu home services)
@@ -84,10 +85,13 @@
                         (list "nvim/init.lua"
                               (local-file "init.lua" "init.lua"))
                         (nvim-tree-sitter tree-sitter-bash "bash")
-                        (nvim-tree-sitter tree-sitter-java "java")
                         (nvim-tree-sitter tree-sitter-markdown "markdown")
                         (nvim-tree-sitter tree-sitter-meson "meson")
                         (nvim-tree-sitter tree-sitter-org "org")
                         (nvim-tree-sitter tree-sitter-rust "rust")
                         (nvim-tree-sitter tree-sitter-scheme "scheme")
-                        (nvim-tree-sitter tree-sitter-slint-unofficial "slint"))))))
+                        (nvim-tree-sitter tree-sitter-slint-unofficial "slint")))
+
+         (service home-files-service-type
+                  (list (list ".local/share/fonts/DejaVuSans.ttf"
+                              (file-append font-dejavu "/share/fonts/truetype/DejaVuSans.ttf")))))))

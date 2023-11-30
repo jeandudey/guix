@@ -18,3 +18,6 @@ fi
 
 # Source the system-wide file.
 [ -f /etc/bashrc ] && source /etc/bashrc
+
+# FIXME: Remove this once I package that stuff.
+export PATH=$PATH:$HOME/.cargo/bin
