@@ -14,7 +14,7 @@
   (timezone "Europe/Madrid")
   (locale "en_US.utf8")
 
-  (kernel linux-6.5)
+  (kernel linux)
   (kernel-arguments '("amd_pstate=active"
                       "quiet"))
   (initrd microcode-initrd)
