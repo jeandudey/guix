@@ -11,7 +11,9 @@
              (gnu packages tree-sitter)
              (gnu services)
              (gnu home services)
+             (gnu home services desktop)
              (gnu home services shells)
+             (gnu home services sound)
              (guix gexp))
 
 (define (nvim-tree-sitter package name)
@@ -71,6 +73,10 @@
                     (list (local-file ".bashrc" "bashrc")))
                    (bash-profile
                     (list (local-file ".bash_profile" "bash_profile")))))
+
+         (service home-dbus-service-type)
+
+         (service home-pipewire-service-type)
 
          (simple-service 'custom-environment-variables
                          home-environment-variables-service-type
