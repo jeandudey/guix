@@ -100,4 +100,6 @@
 
          (service home-files-service-type
                   (list (list ".local/share/fonts/DejaVuSans.ttf"
-                              (file-append font-dejavu "/share/fonts/truetype/DejaVuSans.ttf")))))))
+                              (file-append font-dejavu "/share/fonts/truetype/DejaVuSans.ttf"))
+                        (list ".var/app/com.visualstudio.code/config/Code/User/settings.json"
+                              (local-file "vscode-settings.json" "settings.json")))))))

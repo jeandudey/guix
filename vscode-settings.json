@@ -1,0 +1,12 @@
+{
+    "terminal.integrated.profiles.linux": {
+        "BASH": {
+            "path": "/usr/bin/flatpak-spawn",
+            "args": ["--host", "--env=TERM=xterm-256color", "bash"]
+        },
+        "Flatpak": {
+            "path": "/bin/bash"
+        }
+    },
+    "terminal.integrated.defaultProfile.linux": "BASH"
+}
