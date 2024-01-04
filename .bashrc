@@ -20,4 +20,4 @@ fi
 [ -f /etc/bashrc ] && source /etc/bashrc
 
 # FIXME: Remove this once I package that stuff.
-export PATH=$PATH:$HOME/.cargo/bin
+export PATH=$PATH:$HOME/.cargo/bin:$HOME/.local/bin
