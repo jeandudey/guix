@@ -6,8 +6,23 @@
              (guix gexp)
              (nongnu packages linux)
              (nongnu system linux-initrd))
-(use-service-modules desktop docker linux sddm virtualization xorg)
-(use-package-modules certs docker embedded firmware games gnome hardware virtualization)
+
+(use-service-modules desktop
+                     docker
+                     linux
+                     sddm
+                     virtualization
+                     xorg)
+
+(use-package-modules certs
+                     containers
+                     docker
+                     embedded
+                     firmware
+                     games
+                     gnome
+                     hardware
+                     virtualization)
 
 (operating-system
   (host-name "jeandudey")
@@ -49,12 +64,9 @@
                          (type "vfat")))
                  %base-file-systems))
 
-  ;; Specify a swap file for the system, which resides on the
-  ;; root file system.
   (swap-devices (list (swap-space
                        (target "/swapfile"))))
 
-  ;; Create user `bob' with `alice' as its initial password.
   (users (cons (user-account
                 (name "jeandudey")
                 (comment "Jean-Pierre De Jesus DIAZ")
@@ -62,16 +74,14 @@
                 (supplementary-groups '("wheel" "netdev"
                                         "audio" "video"
                                         "kvm" "dialout"
-					;; Remove this trash.
-					"docker")))
+                                        "docker")))
                %base-user-accounts))
 
-  ;; This is where we specify system-wide packages.
   (packages (append (list
+                      distrobox
                       docker
                       nss-certs
-                      gvfs
-                      virt-manager)
+                      gvfs)
                     %base-packages))
 
   ;; Add GNOME and Xfce---we can choose at the log-in screen
@@ -89,21 +99,16 @@
                           (service docker-service-type)
 
                           (service kernel-module-loader-service-type
-                                   '("vfio-pci"
-				     "nct6775"))
+                                   '("nct6775"))
 
                           (service qemu-binfmt-service-type
                                    (qemu-binfmt-configuration
-                                     (platforms (lookup-qemu-platforms "arm" "aarch64"))))
+                                     (platforms
+                                       (lookup-qemu-platforms "arm" "aarch64"))))
 
                           (set-xorg-configuration
                             (xorg-configuration
                               (keyboard-layout keyboard-layout)))
-
-                          (udev-rules-service 'vfio
-                                              (udev-rule
-                                                "90-vfio.rules"
-                                                "SUBSYSTEM==\"vfio\", OWNER=\"root\", GROUP=\"kvm\""))
 
                           (udev-rules-service 'openocd openocd)
 
