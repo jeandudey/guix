@@ -29,6 +29,7 @@
             "bison"
             "btop"
             "clang"
+            "font-google-noto-emoji"
             "fd"
             "flatpak"
             "flex"
