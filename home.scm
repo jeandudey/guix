@@ -29,6 +29,7 @@
             "bison"
             "btop"
             "clang"
+            "distrobox"
             "font-google-noto-emoji"
             "fd"
             "flatpak"
@@ -44,6 +45,7 @@
             "make"
             "ncurses"
             "neovim"
+            "neovim-coqtail"
             "neovim-packer"
             "openocd"
             "openrgb"
@@ -92,6 +94,8 @@
                         (list "nvim/init.lua"
                               (local-file "init.lua" "init.lua"))
                         (nvim-tree-sitter tree-sitter-bash "bash")
+                        (nvim-tree-sitter tree-sitter-c "c")
+                        (nvim-tree-sitter tree-sitter-json "json")
                         (nvim-tree-sitter tree-sitter-markdown "markdown")
                         (nvim-tree-sitter tree-sitter-meson "meson")
                         (nvim-tree-sitter tree-sitter-org "org")
