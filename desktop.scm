@@ -78,10 +78,8 @@
                %base-user-accounts))
 
   (packages (append (list
-                      distrobox
-                      docker
-                      nss-certs
-                      gvfs)
+                      gvfs
+                      nss-certs)
                     %base-packages))
 
   ;; Add GNOME and Xfce---we can choose at the log-in screen
