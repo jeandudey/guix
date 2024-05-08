@@ -22,7 +22,6 @@ packer.init({
 })
 
 packer.startup(function(use)
-    use('nvim-treesitter/nvim-treesitter')
     use('neovim/nvim-lspconfig')
     use('preservim/nerdtree')
     use('Mofiqul/dracula.nvim')
@@ -30,13 +29,14 @@ packer.startup(function(use)
     use('hrsh7th/cmp-buffer')
     use('hrsh7th/cmp-path')
     use('hrsh7th/nvim-cmp')
+    use('HiPhish/info.vim')
 end)
 
-require('nvim-treesitter.configs').setup {
-    highlight = {
-        enable = true,
-    }
-}
+-- require('nvim-treesitter.configs').setup {
+--     highlight = {
+--         enable = true,
+--     }
+-- }
 
 local lspconfig = require('lspconfig')
 

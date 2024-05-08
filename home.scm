@@ -8,17 +8,88 @@
              (gnu home)
              (gnu packages)
              (gnu packages fonts)
+             (gnu packages shellutils)
              (gnu packages tree-sitter)
              (gnu services)
+             (gnu services configuration)
              (gnu home services)
              (gnu home services desktop)
              (gnu home services shells)
              (gnu home services sound)
+             (guix packages)
              (guix gexp))
 
 (define (nvim-tree-sitter package name)
   (list (string-append "nvim/parser/" name ".so")
         (file-append package "/lib/tree-sitter/libtree-sitter-" name ".so")))
+
+;;;
+;;; direnv
+;;;
+
+(define-configuration/no-serialization home-direnv-configuration
+  (package
+    (package direnv)
+    "The direnv package to use.")
+  (bash?
+    (boolean #t)
+    "Configure Bash with direnv.")
+  (fish?
+    (boolean #f)
+    "Configure Fish with direnv.")
+  (zsh?
+    (boolean #f)
+    "Configure ZSH with direnv."))
+
+(define (home-direnv-binary config)
+  (file-append (home-direnv-configuration-package config) "/bin/direnv"))
+
+(define (home-direnv-bash-extension config)
+  (home-bash-extension
+    (bashrc
+      (if (home-direnv-configuration-bash? config)
+          (list (mixed-text-file
+                  "bashrc"
+                  "eval \"$(" (home-direnv-binary config) " hook bash)\""))
+          '()))))
+
+(define (home-direnv-fish-extension config)
+  (home-fish-extension
+    (config
+      (if (home-direnv-configuration-fish? config)
+          (list (mixed-text-file
+                  "bashrc" (home-direnv-binary config) " hook fish | source"))
+          '()))))
+
+(define (home-direnv-zsh-extension config)
+  (home-zsh-extension
+    (zshrc
+      (if (home-direnv-configuration-zsh? config)
+          (list (mixed-text-file
+                  "bashrc"
+                  "eval \"$(" (home-direnv-binary config) " hook zsh)\""))
+          '()))))
+
+(define (home-direnv-packages config)
+  (list (home-direnv-configuration-package config)))
+
+(define home-direnv-service-type
+  (service-type
+    (name 'direnv)
+    (extensions (list (service-extension home-bash-service-type
+                                         home-direnv-bash-extension)
+                      (service-extension home-fish-service-type
+                                         home-direnv-fish-extension)
+                      (service-extension home-zsh-service-type
+                                         home-direnv-zsh-extension)
+                      (service-extension home-profile-service-type
+                                         home-direnv-packages)))
+    (default-value (home-direnv-configuration))
+    (description "Install and configure direnv.")))
+
+;;;
+;;; Home environment.
+;;;
 
 (home-environment
   ;; Below is the list of packages that will show up in your
@@ -44,6 +115,7 @@
             "m4"
             "make"
             "ncurses"
+            "neomutt"
             "neovim"
             "neovim-coqtail"
             "neovim-packer"
@@ -62,7 +134,9 @@
             "tmux"
             "vim-nerdtree"
             "ungoogled-chromium"
-            "wl-clipboard")))
+            "wl-clipboard"
+            "zathura"
+            "zathura-pdf-mupdf")))
 
   ;; Below is the list of Home services.  To search for available
   ;; services, run 'guix home search KEYWORD' in a terminal.
@@ -77,6 +151,8 @@
                    (bash-profile
                     (list (local-file ".bash_profile" "bash_profile")))))
 
+         (service home-direnv-service-type)
+
          (service home-dbus-service-type)
 
          (service home-pipewire-service-type)
@@ -84,10 +160,13 @@
          (simple-service 'custom-environment-variables
                          home-environment-variables-service-type
                          '(("CC" . "gcc")
-                           ("EDITOR" . "nvim")))
+                           ("EDITOR" . "nvim")
+                           ("PATH" . "$PATH:$HOME/.cargo/bin:$HOME/.local/bin")))
 
          (service home-xdg-configuration-files-service-type
-                  (list (list "git/config"
+                  (list (list "mimeapps.list"
+                              (local-file "mimeapps.list" "mimeapps.list"))
+                        (list "git/config"
                               (local-file "gitconfig" "gitconfig"))
                         (list "git/ignore"
                               (local-file "gitignore" "gitignore"))
