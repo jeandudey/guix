@@ -7,6 +7,7 @@
 (use-modules (foundation packages tree-sitter)
              (gnu home)
              (gnu packages)
+             (gnu packages emacs-xyz)
              (gnu packages fonts)
              (gnu packages shellutils)
              (gnu packages tree-sitter)
@@ -14,14 +15,15 @@
              (gnu services configuration)
              (gnu home services)
              (gnu home services desktop)
+             (gnu home services guix)
              (gnu home services shells)
              (gnu home services sound)
+             (guix build-system emacs)
+             (guix git-download)
+             ((guix licenses) #:prefix license:)
              (guix packages)
-             (guix gexp))
-
-(define (nvim-tree-sitter package name)
-  (list (string-append "nvim/parser/" name ".so")
-        (file-append package "/lib/tree-sitter/libtree-sitter-" name ".so")))
+             (guix gexp)
+             (ice-9 pretty-print))
 
 ;;;
 ;;; direnv
@@ -88,6 +90,63 @@
     (description "Install and configure direnv.")))
 
 ;;;
+;;; Emacs
+;;;
+
+(define init.el
+  (local-file "init.el" "init.el"))
+
+(define emacs-quick-peek
+  (let ((commit "03a276086795faad46a142454fc3e28cab058b70")
+        (revision "0"))
+    (package
+      (name "emacs-quick-peek")
+      (version (git-version "1.0" revision commit))
+      (source (origin
+                (method git-fetch)
+                (uri (git-reference
+                       (url "https://github.com/cpitclaudel/quick-peek")
+                       (commit commit)))
+                (file-name (git-file-name name version))
+                (sha256
+                 (base32
+                  "1kzsphzc9n80v6vf00dr2id9qkm78wqa6sb2ncnasgga6qj358ql"))))
+      (build-system emacs-build-system)
+      (home-page "https://github.com/cpitclaudel/quick-peek")
+      (synopsis "Inline windows for Emacs")
+      (description "This package provides an Emacs library for creating inline
+windows or pop-ups.")
+      (license license:gpl3+))))
+
+(define emacs-fstar-mode
+  (let ((commit "6e5d3ea858f3c8a9d01161d9089909c2b22fdfca")
+        (revision "0"))
+    (package
+      (name "emacs-fstar-mode")
+      (version (git-version "0.0.0" revision commit))
+      (source (origin
+                (method git-fetch)
+                (uri (git-reference
+                       (url "https://github.com/FStarLang/fstar-mode.el")
+                       (commit commit)))
+                (file-name (git-file-name name version))
+                (sha256
+                 (base32
+                  "1z1mcmmrfx1nx3d3374wb7qykzdc3qh9ssgs2wz7b5vnv9cbdfn6"))))
+      (build-system emacs-build-system)
+      (propagated-inputs (list emacs-company
+                               emacs-company-quickhelp
+                               emacs-dash
+                               emacs-flycheck
+                               emacs-quick-peek
+                               emacs-yasnippet))
+      (home-page "https://github.com/FStarLang/fstar-mode.el")
+      (synopsis "Major Emacs mode for editing F* (FStar) code")
+      (description "This package provides an Emacs mode for editing F* (FStar)
+code.")
+      (license license:asl2.0))))
+
+;;;
 ;;; Home environment.
 ;;;
 
@@ -95,48 +154,78 @@
   ;; Below is the list of packages that will show up in your
   ;; Home profile, under ~/.guix-home/profile.
   (packages
-    (specifications->packages
-      (list "bat"
-            "bison"
-            "btop"
-            "clang"
-            "distrobox"
-            "font-google-noto-emoji"
-            "fd"
-            "flatpak"
-            "flex"
-            "gcc-toolchain"
-            "ghex"
-            "git"
-            "hexyl"
-            "icecat"
-            "just"
-            "libreoffice"
-            "m4"
-            "make"
-            "ncurses"
-            "neomutt"
-            "neovim"
-            "neovim-coqtail"
-            "neovim-packer"
-            "openocd"
-            "openrgb"
-            "openssh"
-            "pkg-config"
-            "rust"
-            "rust:cargo"
-            "rust:tools"
-            "ripgrep"
-            "speedcrunch"
-            "strace"
-            "slint-lsp"
-            "telegram-desktop"
-            "tmux"
-            "vim-nerdtree"
-            "ungoogled-chromium"
-            "wl-clipboard"
-            "zathura"
-            "zathura-pdf-mupdf")))
+    (append
+      (specifications->packages
+        (list "bat"
+              "bison"
+              "btop"
+              "clang"
+              "distrobox"
+              "emacs"
+              "emacs-dracula-theme"
+              "emacs-evil"
+              "emacs-geiser"
+              "emacs-geiser-guile"
+              "emacs-lsp-mode"
+              "emacs-lsp-treemacs"
+              "emacs-treemacs"
+              "emacs-treemacs-extra"
+              "font-google-noto-emoji"
+              "fd"
+              "flatpak"
+              "flex"
+              "gcc-toolchain"
+              "ghex"
+              "git"
+              "hexyl"
+              "icecat"
+              "just"
+              "libreoffice"
+              "m4"
+              "make"
+              "ncurses"
+              "neomutt"
+              "neovim"
+              "neovim-coqtail"
+              "neovim-packer"
+              "openocd"
+              "openrgb"
+              "openssh"
+              "pkg-config"
+              "rust"
+              "rust:cargo"
+              "rust:tools"
+              "ripgrep"
+              "speedcrunch"
+              "strace"
+              "slint-lsp"
+              "telegram-desktop"
+              "tree-sitter-bash"
+              "tree-sitter-c"
+              "tree-sitter-cmake"
+              "tree-sitter-cpp"
+              "tree-sitter-dockerfile"
+              "tree-sitter-java"
+              "tree-sitter-javascript"
+              "tree-sitter-html"
+              "tree-sitter-json"
+              "tree-sitter-lua"
+              "tree-sitter-markdown"
+              "tree-sitter-meson"
+              "tree-sitter-org"
+              "tree-sitter-python"
+              "tree-sitter-ruby"
+              "tree-sitter-rust"
+              "tree-sitter-scala"
+              "tree-sitter-scheme"
+              "tree-sitter-slint-unofficial"
+              "tmux"
+              "vim-nerdtree"
+              "ungoogled-chromium"
+              "wl-clipboard"
+              "zathura"
+              "zathura-pdf-mupdf"))
+      (list emacs-fstar-mode)))
 
   ;; Below is the list of Home services.  To search for available
   ;; services, run 'guix home search KEYWORD' in a terminal.
@@ -146,8 +235,6 @@
                    (aliases '(("grep" . "grep --color=auto")
                               ("ll" . "ls -l")
                               ("ls" . "ls -p --color=auto")))
-                   (bashrc
-                    (list (local-file ".bashrc" "bashrc")))
                    (bash-profile
                     (list (local-file ".bash_profile" "bash_profile")))))
 
@@ -171,25 +258,11 @@
                         (list "git/ignore"
                               (local-file "gitignore" "gitignore"))
                         (list "nvim/init.lua"
-                              (local-file "init.lua" "init.lua"))
-                        (nvim-tree-sitter tree-sitter-bash "bash")
-                        (nvim-tree-sitter tree-sitter-c "c")
-                        (nvim-tree-sitter tree-sitter-cmake "cmake")
-                        (nvim-tree-sitter tree-sitter-cpp "cpp")
-                        (nvim-tree-sitter tree-sitter-json "json")
-                        (nvim-tree-sitter tree-sitter-lua "lua")
-                        (nvim-tree-sitter tree-sitter-markdown "markdown")
-                        (nvim-tree-sitter tree-sitter-meson "meson")
-                        (nvim-tree-sitter tree-sitter-org "org")
-                        (nvim-tree-sitter tree-sitter-python "python")
-                        (nvim-tree-sitter tree-sitter-ruby "ruby")
-                        (nvim-tree-sitter tree-sitter-rust "rust")
-                        (nvim-tree-sitter tree-sitter-scala "scala")
-                        (nvim-tree-sitter tree-sitter-scheme "scheme")
-                        (nvim-tree-sitter tree-sitter-slint-unofficial "slint")))
+                              (local-file "init.lua" "init.lua"))))
 
          (service home-files-service-type
-                  (list (list ".local/share/fonts/DejaVuSans.ttf"
+                  (list (list ".emacs" init.el)
+                        (list ".local/share/fonts/DejaVuSans.ttf"
                               (file-append font-dejavu "/share/fonts/truetype/DejaVuSans.ttf"))
                         (list ".var/app/com.visualstudio.code/config/Code/User/settings.json"
                               (local-file "vscode-settings.json" "settings.json")))))))

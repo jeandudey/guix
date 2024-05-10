@@ -3,6 +3,7 @@
 # Can add the file to the repository by doing: `git add -f manifest.scm`.
 #
 manifest.scm
+.envrc
 
 # Compilation database.
 compile_commands.json
