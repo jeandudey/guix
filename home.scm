@@ -8,7 +8,8 @@
              (gnu services)
              (gnu services configuration)
              (gnu home services)
-             (gnu home services desktop)             (gnu home services guix)
+             (gnu home services desktop)
+             (gnu home services guix)
              (gnu home services shells)
              (gnu home services sound)
              (guix build-system emacs)
@@ -25,16 +26,7 @@
 (define-configuration/no-serialization home-direnv-configuration
   (package
     (package direnv)
-    "The direnv package to use.")
-  (bash?
-    (boolean #t)
-    "Configure Bash with direnv.")
-  (fish?
-    (boolean #f)
-    "Configure Fish with direnv.")
-  (zsh?
-    (boolean #f)
-    "Configure ZSH with direnv."))
+    "The direnv package to use."))
 
 (define (home-direnv-binary config)
   (file-append (home-direnv-configuration-package config) "/bin/direnv"))
@@ -42,45 +34,55 @@
 (define (home-direnv-bash-extension config)
   (home-bash-extension
     (bashrc
-      (if (home-direnv-configuration-bash? config)
-          (list (mixed-text-file
-                  "bashrc"
-                  "eval \"$(" (home-direnv-binary config) " hook bash)\""))
-          '()))))
+      (list (mixed-text-file
+              "bashrc"
+              "eval \"$(" (home-direnv-binary config) " hook bash)\"")))))
 
 (define (home-direnv-fish-extension config)
   (home-fish-extension
     (config
-      (if (home-direnv-configuration-fish? config)
-          (list (mixed-text-file
-                  "bashrc" (home-direnv-binary config) " hook fish | source"))
-          '()))))
+      (list (mixed-text-file
+              "bashrc" (home-direnv-binary config) " hook fish | source")))))
 
 (define (home-direnv-zsh-extension config)
   (home-zsh-extension
     (zshrc
-      (if (home-direnv-configuration-zsh? config)
-          (list (mixed-text-file
-                  "bashrc"
-                  "eval \"$(" (home-direnv-binary config) " hook zsh)\""))
-          '()))))
+      (list (mixed-text-file
+              "bashrc"
+              "eval \"$(" (home-direnv-binary config) " hook zsh)\"")))))
 
 (define (home-direnv-packages config)
   (list (home-direnv-configuration-package config)))
 
-(define home-direnv-service-type
+(define home-direnv-bash-service-type
   (service-type
     (name 'direnv)
     (extensions (list (service-extension home-bash-service-type
                                          home-direnv-bash-extension)
-                      (service-extension home-fish-service-type
+                      (service-extension home-profile-service-type
+                                         home-direnv-packages)))
+    (default-value (home-direnv-configuration))
+    (description "Install and configure direnv for Bash.")))
+
+(define home-direnv-fish-service-type
+  (service-type
+    (name 'direnv)
+    (extensions (list (service-extension home-fish-service-type
                                          home-direnv-fish-extension)
-                      (service-extension home-zsh-service-type
+                      (service-extension home-profile-service-type
+                                         home-direnv-packages)))
+    (default-value (home-direnv-configuration))
+    (description "Install and configure direnv for Fish.")))
+
+(define home-direnv-zsh-service-type
+  (service-type
+    (name 'direnv)
+    (extensions (list (service-extension home-zsh-service-type
                                          home-direnv-zsh-extension)
                       (service-extension home-profile-service-type
                                          home-direnv-packages)))
     (default-value (home-direnv-configuration))
-    (description "Install and configure direnv.")))
+    (description "Install and configure direnv for ZSH.")))
 
 ;;;
 ;;; Emacs
@@ -231,7 +233,7 @@ code.")
                    (bash-profile
                     (list (local-file ".bash_profile" "bash_profile")))))
 
-         (service home-direnv-service-type)
+         (service home-direnv-bash-service-type)
 
          (service home-dbus-service-type)
 
