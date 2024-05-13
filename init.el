@@ -2,17 +2,25 @@
 
 (require 'treemacs)
 (require 'treemacs-evil)
+(require 'yasnippet)
 
+(setq-default indent-tabs-mode nil)
 (load-theme 'dracula t)
 (tool-bar-mode -1)
 (evil-mode 1)
 
 (with-eval-after-load 'geiser-guile
-  (add-to-list 'geiser-guile-load-path "~/src/guix"))
+  (add-to-list 'geiser-guile-load-path "~/Documents/guix"))
+
+(with-eval-after-load 'yasnippet
+  (add-to-list 'yas-snippet-dirs "~/Documents/guix/etc/snippets/yas"))
+
+(yas-global-mode 1)
 
 (setq user-full-name "Jean-Pierre De Jesus DIAZ")
 (setq user-mail-address "me@jeandudey.tech")
 
+(setq inhibit-splash-screen t)
 
 (setq treemacs-collapse-dirs                   (if treemacs-python-executable 3 0)
       treemacs-deferred-git-apply-delay        0.5
@@ -72,5 +80,9 @@
 (treemacs-fringe-indicator-mode 'always)
 (treemacs-git-commit-diff-mode t)
 
+(add-hook 'emacs-startup-hook 'treemacs)
+
 (global-set-key (kbd "C-x t t") #'treemacs)
 (global-set-key (kbd "C-x t d") #'treemacs-select-directory)
+(global-set-key (kbd "C-c s") 'shell)
+(add-to-list 'default-frame-alist '(fullscreen . maximized))

@@ -1,9 +1,3 @@
-;; Este archivo "home-environment" se puede pasar a 'guix home reconfigure'
-;; para reproducir el contenido de su perfil.  Esto es "simbólico": sólo
-;; especifica nombres de paquete.  Para reproducir el mismo perfil exacto, también
-;; necesita capturar los canales que están siendo usados, como son devueltos por "guix describe".
-;; Vea la sección "Replicando Guix" en el manual.
-
 (use-modules (foundation packages tree-sitter)
              (gnu home)
              (gnu packages)
@@ -14,8 +8,7 @@
              (gnu services)
              (gnu services configuration)
              (gnu home services)
-             (gnu home services desktop)
-             (gnu home services guix)
+             (gnu home services desktop)             (gnu home services guix)
              (gnu home services shells)
              (gnu home services sound)
              (guix build-system emacs)
@@ -151,81 +144,81 @@ code.")
 ;;;
 
 (home-environment
-  ;; Below is the list of packages that will show up in your
-  ;; Home profile, under ~/.guix-home/profile.
-  (packages
-    (append
-      (specifications->packages
-        (list "bat"
-              "bison"
-              "btop"
-              "clang"
-              "distrobox"
-              "emacs"
-              "emacs-dracula-theme"
-              "emacs-evil"
-              "emacs-geiser"
-              "emacs-geiser-guile"
-              "emacs-lsp-mode"
-              "emacs-lsp-treemacs"
-              "emacs-treemacs"
-              "emacs-treemacs-extra"
-              "font-google-noto-emoji"
-              "fd"
-              "flatpak"
-              "flex"
-              "gcc-toolchain"
-              "ghex"
-              "git"
-              "hexyl"
-              "icecat"
-              "just"
-              "libreoffice"
-              "m4"
-              "make"
-              "ncurses"
-              "neomutt"
-              "neovim"
-              "neovim-coqtail"
-              "neovim-packer"
-              "openocd"
-              "openrgb"
-              "openssh"
-              "pkg-config"
-              "rust"
-              "rust:cargo"
-              "rust:tools"
-              "ripgrep"
-              "speedcrunch"
-              "strace"
-              "slint-lsp"
-              "telegram-desktop"
-              "tree-sitter-bash"
-              "tree-sitter-c"
-              "tree-sitter-cmake"
-              "tree-sitter-cpp"
-              "tree-sitter-dockerfile"
-              "tree-sitter-java"
-              "tree-sitter-javascript"
-              "tree-sitter-html"
-              "tree-sitter-json"
-              "tree-sitter-lua"
-              "tree-sitter-markdown"
-              "tree-sitter-meson"
-              "tree-sitter-org"
-              "tree-sitter-python"
-              "tree-sitter-ruby"
-              "tree-sitter-rust"
-              "tree-sitter-scala"
-              "tree-sitter-scheme"
-              "tree-sitter-slint-unofficial"
-              "tmux"
-              "vim-nerdtree"
-              "ungoogled-chromium"
-              "wl-clipboard"
-              "zathura"
-              "zathura-pdf-mupdf"))
-      (list emacs-fstar-mode)))
+ (packages
+  (append
+   (specifications->packages
+    (list "bat"
+          "bison"
+          "btop"
+          "clang"
+          "distrobox"
+          "emacs"
+          "emacs-dracula-theme"
+          "emacs-evil"
+          "emacs-geiser"
+          "emacs-geiser-guile"
+          "emacs-lsp-mode"
+          "emacs-lsp-treemacs"
+          "emacs-treemacs"
+          "emacs-treemacs-extra"
+          "emacs-yasnippet"
+          "emacs-yasnippet-snippets"
+          "font-google-noto-emoji"
+          "fd"
+          "flatpak"
+          "flex"
+          "gcc-toolchain"
+          "ghex"
+          "git"
+          "hexyl"
+          "icecat"
+          "just"
+          "libreoffice"
+          "m4"
+          "make"
+          "ncurses"
+          "neomutt"
+          "neovim"
+          "neovim-coqtail"
+          "neovim-packer"
+          "openocd"
+          "openrgb"
+          "openssh"
+          "pkg-config"
+          "rust"
+          "rust:cargo"
+          "rust:tools"
+          "ripgrep"
+          "speedcrunch"
+          "strace"
+          "slint-lsp"
+          "telegram-desktop"
+          "tree-sitter-bash"
+          "tree-sitter-c"
+          "tree-sitter-cmake"
+          "tree-sitter-cpp"
+          "tree-sitter-dockerfile"
+          "tree-sitter-java"
+          "tree-sitter-javascript"
+          "tree-sitter-html"
+          "tree-sitter-json"
+          "tree-sitter-lua"
+          "tree-sitter-markdown"
+          "tree-sitter-meson"
+          "tree-sitter-org"
+          "tree-sitter-python"
+          "tree-sitter-ruby"
+          "tree-sitter-rust"
+          "tree-sitter-scala"
+          "tree-sitter-scheme"
+          "tree-sitter-slint-unofficial"
+          "tmux"
+          "vim-nerdtree"
+          "ungoogled-chromium"
+          "wl-clipboard"
+          "zathura"
+          "zathura-pdf-mupdf"))
+   (list emacs-fstar-mode)))
 
   ;; Below is the list of Home services.  To search for available
   ;; services, run 'guix home search KEYWORD' in a terminal.
