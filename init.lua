@@ -30,6 +30,7 @@ packer.startup(function(use)
     use('hrsh7th/cmp-path')
     use('hrsh7th/nvim-cmp')
     use('HiPhish/info.vim')
+    use('ELLIOTTCABLE/vim-menhir')
 end)
 
 -- require('nvim-treesitter.configs').setup {
