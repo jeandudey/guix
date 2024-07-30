@@ -6,3 +6,5 @@
 	editor = nvim
 [commit]
 	gpgSign = true
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
