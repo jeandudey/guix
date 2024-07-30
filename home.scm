@@ -172,7 +172,6 @@ code.")
           "fd"
           "flatpak"
           "flex"
-          "gcc-toolchain"
           "ghex"
           "git"
           "hexyl"
@@ -196,7 +195,7 @@ code.")
           "ripgrep"
           "speedcrunch"
           "strace"
-          "slint-lsp"
+          ;"slint-lsp"
           "telegram-desktop"
           "tree-sitter-bash"
           "tree-sitter-c"
@@ -216,7 +215,7 @@ code.")
           "tree-sitter-rust"
           "tree-sitter-scala"
           "tree-sitter-scheme"
-          "tree-sitter-slint-unofficial"
+          ;"tree-sitter-slint-unofficial"
           "tmux"
           "vim-nerdtree"
           "ungoogled-chromium"
@@ -244,8 +243,7 @@ code.")
 
          (simple-service 'custom-environment-variables
                          home-environment-variables-service-type
-                         '(("CC" . "gcc")
-                           ("EDITOR" . "nvim")
+                         '(("EDITOR" . "nvim")
                            ("PATH" . "$PATH:$HOME/.cargo/bin:$HOME/.local/bin")))
 
          (service home-xdg-configuration-files-service-type
