@@ -12,6 +12,7 @@
                      docker
                      linux
                      sddm
+                     ssh
                      virtualization
                      xorg)
 
@@ -25,9 +26,33 @@
                      hardware
                      virtualization)
 
+(define %timezone "Europe/Madrid")
+
+(define %childhurd-os
+  (operating-system
+    (inherit %hurd-vm-operating-system)
+    (timezone %timezone)
+    (users (cons (user-account
+                  (name "jeandudey")
+                  (comment "Jean-Pierre De Jesus DIAZ")
+                  (group "users")
+                  (supplementary-groups '("wheel")))
+                 %base-user-accounts))
+    (services
+     ;; Modify the SSH configuration to allow login as "root"
+     ;; and as "charlie" using public key authentication.
+     (modify-services (operating-system-user-services
+                       %hurd-vm-operating-system)
+       (openssh-service-type
+        config => (openssh-configuration
+                   (inherit config)
+                   (authorized-keys
+                    `(("jeandudey" ,(local-file "ssh/id_ed25519.pub"))))))))))
+
+
 (operating-system
   (host-name "jeandudey")
-  (timezone "Europe/Madrid")
+  (timezone %timezone)
   (locale "en_US.utf8")
 
   (kernel linux)
@@ -102,6 +127,11 @@
                                    (qemu-binfmt-configuration
                                      (platforms
                                        (lookup-qemu-platforms "arm" "aarch64"))))
+                          (service hurd-vm-service-type
+                                   (hurd-vm-configuration
+                                     (os %childhurd-os)
+                                     (disk-size (* 10000 (expt 2 20)))
+                                     (memory-size 4096)))
 
                           (set-xorg-configuration
                             (xorg-configuration
