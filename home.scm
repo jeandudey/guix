@@ -3,6 +3,7 @@
              (gnu packages)
              (gnu packages emacs-xyz)
              (gnu packages fonts)
+             (gnu packages maths)
              (gnu packages shellutils)
              (gnu packages tree-sitter)
              (gnu services)
@@ -260,5 +261,9 @@ code.")
                   (list (list ".emacs" init.el)
                         (list ".local/share/fonts/DejaVuSans.ttf"
                               (file-append font-dejavu "/share/fonts/truetype/DejaVuSans.ttf"))
+                        (list ".config/nvim/ftdetect/why3.vim"
+                              (file-append why3 "/share/why3/vim/ftdetect/why3.vim"))
+                        (list ".config/nvim/syntax/why3.vim"
+                              (file-append why3 "/share/why3/vim/syntax/why3.vim"))
                         (list ".var/app/com.visualstudio.code/config/Code/User/settings.json"
                               (local-file "vscode-settings.json" "settings.json")))))))
