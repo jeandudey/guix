@@ -2,15 +2,18 @@
 
 (use-modules (gnu)
              (gnu system nss)
+             (guix build-system trivial)
              (guix channels)
-             (guix utils)
              (guix gexp)
+             (guix packages)
+             (guix utils)
              (nongnu packages linux)
              (nongnu system linux-initrd))
 
 (use-service-modules desktop
                      docker
                      linux
+                     nix
                      sddm
                      ssh
                      virtualization
@@ -28,28 +31,6 @@
 
 (define %timezone "Europe/Madrid")
 
-(define %childhurd-os
-  (operating-system
-    (inherit %hurd-vm-operating-system)
-    (timezone %timezone)
-    (users (cons (user-account
-                  (name "jeandudey")
-                  (comment "Jean-Pierre De Jesus DIAZ")
-                  (group "users")
-                  (supplementary-groups '("wheel")))
-                 %base-user-accounts))
-    (services
-     ;; Modify the SSH configuration to allow login as "root"
-     ;; and as "charlie" using public key authentication.
-     (modify-services (operating-system-user-services
-                       %hurd-vm-operating-system)
-       (openssh-service-type
-        config => (openssh-configuration
-                   (inherit config)
-                   (authorized-keys
-                    `(("jeandudey" ,(local-file "ssh/id_ed25519.pub"))))))))))
-
-
 (operating-system
   (host-name "jeandudey")
   (timezone %timezone)
@@ -57,13 +38,16 @@
 
   (kernel linux)
   (kernel-arguments '("amd_pstate=active"
-                      "quiet"))
+                      "rd.driver.blacklist=nouveau"
+                      "modprobe.blacklist=nouveau"
+                      "amdgpu.gpu_recovery=1"
+                      "amdgpu.dcdebugmask=0x10"))
   (initrd microcode-initrd)
   (firmware (list linux-firmware))
 
   ;; Choose US English keyboard layout.  The "altgr-intl"
   ;; variant provides dead keys for accented characters.
-  (keyboard-layout (keyboard-layout "us" "altgr-intl"))
+  (keyboard-layout (keyboard-layout "es" "altgr-intl"))
 
   ;; Use the UEFI variant of GRUB with the EFI System
   ;; Partition mounted on /boot/efi.
@@ -100,10 +84,15 @@
                 (supplementary-groups '("wheel" "netdev"
                                         "audio" "video"
                                         "kvm" "dialout"
-                                        "docker")))
+                                        "docker" "libvirt")))
                %base-user-accounts))
 
-  (packages (append (list gvfs)
+  (groups (cons (user-group
+                  (name "libvirt")
+                  (system? #t))))
+
+  (packages (append (list gvfs
+                          virt-manager)
                     %base-packages))
 
   ;; Add GNOME and Xfce---we can choose at the log-in screen
@@ -118,7 +107,13 @@
                                    (bluetooth-configuration
                                      (auto-enable? #t)))
 
+                          (service containerd-service-type)
+
                           (service docker-service-type)
+
+                          (service nix-service-type
+                                   (nix-configuration
+                                    (sandbox #f)))
 
                           (service kernel-module-loader-service-type
                                    '("nct6775"))
@@ -127,11 +122,10 @@
                                    (qemu-binfmt-configuration
                                      (platforms
                                        (lookup-qemu-platforms "arm" "aarch64"))))
-                          (service hurd-vm-service-type
-                                   (hurd-vm-configuration
-                                     (os %childhurd-os)
-                                     (disk-size (* 10000 (expt 2 20)))
-                                     (memory-size 4096)))
+
+                          (service libvirt-service-type
+                                   (libvirt-configuration
+                                     (unix-sock-group "libvirt")))
 
                           (set-xorg-configuration
                             (xorg-configuration
@@ -151,17 +145,12 @@
                         
                         (guix-service-type config => (guix-configuration
                           (inherit config)
+                            (discover? #t)
                             (substitute-urls
                               (append (list "https://substitutes.nonguix.org")
                                       %default-substitute-urls))
                             (authorized-keys
-                              (append (list (plain-file "nonguix.pub"
-                                                        "(public-key 
- (ecc
-  (curve Ed25519)
-  (q #C1FD53E5D4CE971933EC50C9F307AE2171A2D3B52C804642A7A35F84F3A4EA98#)
-  )
- )"))
+                              (append (list (local-file "keys/substitutes.nonguix.org.pub"))
                                       %default-authorized-guix-keys))
                             (channels
                               (append (list (channel

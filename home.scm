@@ -1,7 +1,6 @@
-(use-modules (foundation packages tree-sitter)
+(use-modules ;(formal-verification packages emacs)
              (gnu home)
              (gnu packages)
-             (gnu packages emacs-xyz)
              (gnu packages fonts)
              (gnu packages maths)
              (gnu packages shellutils)
@@ -13,7 +12,6 @@
              (gnu home services guix)
              (gnu home services shells)
              (gnu home services sound)
-             (guix build-system emacs)
              (guix git-download)
              ((guix licenses) #:prefix license:)
              (guix packages)
@@ -92,138 +90,36 @@
 (define init.el
   (local-file "init.el" "init.el"))
 
-(define emacs-quick-peek
-  (let ((commit "03a276086795faad46a142454fc3e28cab058b70")
-        (revision "0"))
-    (package
-      (name "emacs-quick-peek")
-      (version (git-version "1.0" revision commit))
-      (source (origin
-                (method git-fetch)
-                (uri (git-reference
-                       (url "https://github.com/cpitclaudel/quick-peek")
-                       (commit commit)))
-                (file-name (git-file-name name version))
-                (sha256
-                 (base32
-                  "1kzsphzc9n80v6vf00dr2id9qkm78wqa6sb2ncnasgga6qj358ql"))))
-      (build-system emacs-build-system)
-      (home-page "https://github.com/cpitclaudel/quick-peek")
-      (synopsis "Inline windows for Emacs")
-      (description "This package provides an Emacs library for creating inline
-windows or pop-ups.")
-      (license license:gpl3+))))
-
-(define emacs-fstar-mode
-  (let ((commit "6e5d3ea858f3c8a9d01161d9089909c2b22fdfca")
-        (revision "0"))
-    (package
-      (name "emacs-fstar-mode")
-      (version (git-version "0.0.0" revision commit))
-      (source (origin
-                (method git-fetch)
-                (uri (git-reference
-                       (url "https://github.com/FStarLang/fstar-mode.el")
-                       (commit commit)))
-                (file-name (git-file-name name version))
-                (sha256
-                 (base32
-                  "1z1mcmmrfx1nx3d3374wb7qykzdc3qh9ssgs2wz7b5vnv9cbdfn6"))))
-      (build-system emacs-build-system)
-      (propagated-inputs (list emacs-company
-                               emacs-company-quickhelp
-                               emacs-dash
-                               emacs-flycheck
-                               emacs-quick-peek
-                               emacs-yasnippet))
-      (home-page "https://github.com/FStarLang/fstar-mode.el")
-      (synopsis "Major Emacs mode for editing F* (FStar) code")
-      (description "This package provides an Emacs mode for editing F* (FStar)
-code.")
-      (license license:asl2.0))))
-
 ;;;
 ;;; Home environment.
 ;;;
 
 (home-environment
  (packages
-  (append
-   (specifications->packages
-    (list "bat"
-          "bison"
-          "btop"
-          "clang"
-          "distrobox"
-          "emacs"
-          "emacs-direnv"
-          "emacs-dracula-theme"
-          "emacs-evil"
-          "emacs-evil-collection"
-          "emacs-geiser"
-          "emacs-geiser-guile"
-          "emacs-lsp-mode"
-          "emacs-lsp-treemacs"
-          "emacs-magit"
-          "emacs-treemacs"
-          "emacs-treemacs-extra"
-          "emacs-yasnippet"
-          "emacs-yasnippet-snippets"
-          "font-google-noto-emoji"
-          "fd"
-          "flatpak"
-          "flex"
-          "ghex"
-          "git"
-          "hexyl"
-          "icecat"
-          "just"
-          "libreoffice"
-          "m4"
-          "make"
-          "ncurses"
-          "neomutt"
-          "neovim"
-          "neovim-coqtail"
-          "neovim-packer"
-          "openocd"
-          "openrgb"
-          "openssh"
-          "pkg-config"
-          "rust"
-          "rust:cargo"
-          "rust:tools"
-          "ripgrep"
-          "speedcrunch"
-          "strace"
-          ;"slint-lsp"
-          "telegram-desktop"
-          "tree-sitter-bash"
-          "tree-sitter-c"
-          "tree-sitter-cmake"
-          "tree-sitter-cpp"
-          "tree-sitter-dockerfile"
-          "tree-sitter-java"
-          "tree-sitter-javascript"
-          "tree-sitter-html"
-          "tree-sitter-json"
-          "tree-sitter-lua"
-          "tree-sitter-markdown"
-          "tree-sitter-meson"
-          "tree-sitter-org"
-          "tree-sitter-python"
-          "tree-sitter-ruby"
-          "tree-sitter-rust"
-          "tree-sitter-scala"
-          "tree-sitter-scheme"
-          ;"tree-sitter-slint-unofficial"
-          "tmux"
-          "vim-nerdtree"
-          "ungoogled-chromium"
-          "wl-clipboard"
-          "zathura"
-          "zathura-pdf-mupdf"))
-   (list emacs-fstar-mode)))
+  (specifications->packages
+   (list "btop"
+         "distrobox"
+         "fd"
+         "font-dejavu"
+         "flatpak"
+         "ghex"
+         "git"
+         "icecat"
+         "librewolf"
+         "just"
+         "libreoffice"
+         "neovim"
+         "neovim-coqtail"
+         "neovim-packer"
+         "openocd"
+         "openrgb"
+         "openssh"
+         "ripgrep"
+         "speedcrunch"
+         "strace"
+         "tmux"
+         "vim-nerdtree"
+         "wl-clipboard")))
 
   ;; Below is the list of Home services.  To search for available
   ;; services, run 'guix home search KEYWORD' in a terminal.
@@ -234,7 +130,11 @@ code.")
                               ("ll" . "ls -l")
                               ("ls" . "ls -p --color=auto")))
                    (bash-profile
-                    (list (local-file ".bash_profile" "bash_profile")))))
+                    (list (local-file ".bash_profile" "bash_profile")))
+                   (bashrc
+                    (list (mixed-text-file
+                            "bashrc"
+                            "export PATH=$PATH:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.nix-profile/bin")))))
 
          (service home-direnv-bash-service-type)
 
@@ -245,7 +145,7 @@ code.")
          (simple-service 'custom-environment-variables
                          home-environment-variables-service-type
                          '(("EDITOR" . "nvim")
-                           ("PATH" . "$PATH:$HOME/.cargo/bin:$HOME/.local/bin")))
+                           ("PATH" . "$PATH:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.nix-profile/bin")))
 
          (service home-xdg-configuration-files-service-type
                   (list (list "mimeapps.list"

@@ -12,7 +12,7 @@ eval "$(guix package --search-paths \
 -p /run/current-system/profile)"
 
 # Prepend setuid programs.
-export PATH=/run/setuid-programs:$PATH
+export PATH=/run/setuid-programs:$PATH:$HOME/.nix-profile/bin
 
 export XDG_DATA_DIRS="$XDG_DATA_DIRS:$HOME/.local/share/flatpak/exports/share"
 export XDG_DATA_DIRS="$XDG_DATA_DIRS:/var/lib/flatpak/exports/share"

@@ -3,6 +3,8 @@ vim.o.tabstop    = 4
 vim.o.shiftwidth = 4
 vim.o.number     = true
 
+vim.g.coqtail_auto_set_proof_diffs = 'on'
+
 vim.api.nvim_create_autocmd('BufEnter', {
     pattern  = '*.slint',
     callback = function()
@@ -22,8 +24,8 @@ packer.init({
 })
 
 packer.startup(function(use)
-    use('neovim/nvim-lspconfig')
     use('preservim/nerdtree')
+    use('FStarLang/VimFStar')
     use('Mofiqul/dracula.nvim')
     use('hrsh7th/cmp-nvim-lsp')
     use('hrsh7th/cmp-buffer')
@@ -39,11 +41,13 @@ end)
 --     }
 -- }
 
-local lspconfig = require('lspconfig')
+-- local lspconfig = require('lspconfig')
+-- 
+-- lspconfig.clangd.setup {}
+-- lspconfig.rust_analyzer.setup {}
+-- lspconfig.slint_lsp.setup {}
 
-lspconfig.clangd.setup {}
-lspconfig.rust_analyzer.setup {}
-lspconfig.slint_lsp.setup {}
+vim.lsp.enable('')
 
 vim.cmd[[colorscheme dracula]]
 vim.cmd[[set background=dark]]
