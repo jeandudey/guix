@@ -87,10 +87,6 @@
                                         "docker" "libvirt")))
                %base-user-accounts))
 
-  (groups (cons (user-group
-                  (name "libvirt")
-                  (system? #t))))
-
   (packages (append (list gvfs
                           virt-manager)
                     %base-packages))
