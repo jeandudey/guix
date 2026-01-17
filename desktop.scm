@@ -38,10 +38,16 @@
 
   (kernel linux)
   (kernel-arguments '("amd_pstate=active"
-                      "rd.driver.blacklist=nouveau"
-                      "modprobe.blacklist=nouveau"
                       "amdgpu.gpu_recovery=1"
-                      "amdgpu.dcdebugmask=0x10"))
+                      "amdgpu.dcdebugmask=0x10"
+
+                      ;; IOMMU
+                      "amd_iommu=on"
+                      "iommu=pt"
+
+                      ;; Don't load drivers for NVIDIA graphics.
+                      "modprobe.blacklist=nouveau"
+                      "rd.driver.blacklist=nouveau"))
   (initrd microcode-initrd)
   (firmware (list linux-firmware))
 
@@ -122,6 +128,8 @@
                           (service libvirt-service-type
                                    (libvirt-configuration
                                      (unix-sock-group "libvirt")))
+
+                          (service virtlog-service-type)
 
                           (set-xorg-configuration
                             (xorg-configuration
